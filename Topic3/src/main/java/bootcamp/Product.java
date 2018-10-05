@@ -23,6 +23,7 @@ public class Product {
         this.productName = productName;
         this.price = price;
         this.category = category;
+        this.quantity = quantity;
         }
 
         /**
@@ -36,9 +37,13 @@ public class Product {
          */
         public boolean addProduct(int id, String productName, double price, int category,  int quantity) {
         boolean added = false;
-        Product prod = new Product(id, productName, price, category, quantity);
-        if (id > -1 && productName != "" && quantity > 0 ) {
-        productList.add(prod);
+        if (id > -1 && productName.isEmpty() == false && quantity > 0 && category >= 0  && category < 5 ) {
+        this.setId(id);
+        this.setProductName(productName);
+        this.setPrice(price);
+        this.setCategory(category);
+        this.setQuantity(quantity);
+        productList.add(new Product(this.getId(),this.getProductName(),this.getPrice(),this.getCategory(),this.getQuantity()));
         added = true;
         }
         else {
@@ -72,11 +77,21 @@ public class Product {
          */
         public String modifyProduct(int item, int id, String productName, double price, int category,  int quantity) {
         String modified = "";
-        Product prod = new Product(id, productName, price, category, quantity);
         if(productList.size()> item) {
+           Product prod = productList.get(item);
+           prod.getId();
+           prod.getProductName();
+           prod.getPrice();
+           prod.getCategory();
+           prod.getQuantity();    
            if(productList.get(item) != null) {
-            productList.set(item, prod);
-            modified = productList.get(item).toString();
+              prod.setId(id);
+              prod.setProductName(productName);
+              prod.setPrice(price);
+              prod.setCategory(category);
+              prod.setQuantity(quantity);
+              productList.set(item, prod);
+              modified = productList.get(item).toString();
            }
         }
         else {
@@ -97,6 +112,42 @@ public class Product {
         itemList = "";
         }
          return itemList;
+        }
+        
+        /**
+         * method for stock 
+         */
+        public boolean stock (String productName, int prodStock, int buyed) {
+        boolean haveStock = false;
+        if (prodStock >= buyed) {
+        haveStock = true;
+        switch (productName) {
+            case "mouse": prodStock -= buyed;
+                          break;
+            case "pad": prodStock -= buyed;
+                        break;
+            case "keyboard": prodStock -= buyed;
+                             break;
+        }
+        }
+        else {
+        haveStock = false;
+        }
+        return haveStock;
+        }
+
+        /**
+         * method for discount 
+         */
+        public double priceWithDiscount(int percentage, double price) {
+        double finalPrice = 0;
+        if (percentage < 100 && percentage > -1) {
+            finalPrice = price - percentage*price/100;
+        }
+        else {
+            finalPrice = price;
+        }
+        return finalPrice;
         }
         
 }
